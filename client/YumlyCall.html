@@ -22,7 +22,7 @@
           return;
         }
 
-        var request = link + "/api/recipes?_app_id=" + appId + "&_app_key=" + appKey + "&" + type;
+        var request = link + "/api/recipes?_app_id=" + appId + "&_app_key=" + appKey + "&q=" + type;
         console.log(request);
 
         $.ajax({
