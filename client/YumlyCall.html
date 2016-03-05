@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+    <title>YumlyCall</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+      var link = "https://api.yummly.com/v1";
+      var appId = "ae30518e";
+      var appKey = "8d86035af38ff06a7cf110d4bc49decd";
+      window.onload = init;
+
+      function init(){
+        document.querySelector("#connect").onclick = getData;
+      }
+
+      function getData(){
+        var type = document.querySelector("#recipes").value;
+
+        if(!type){
+          console.log("Look for something!");
+          return;
+        }
+
+        var request = link + "/api/recipes?_app_id=" + appId + "&_app_key=" + appKey + "&" + type;
+        console.log(request);
+
+        $.ajax({
+          url: request,
+          data: null,
+          success: requestSuccess,
+          error: function(xhr, ajaxOptions, thrownError){
+            console.log(xhr.statusText);
+            console.log(thrownError);
+          }
+        });
+
+        function requestSuccess(obj){
+          document.querySelector("#feedback").innerHTML = "Check console";
+          console.log(obj);
+        }
+      }
+      </script>
+    </head>
+<body>
+  <label>What kind of recipies:</label>
+  <input id="recipes" type="text" value=""/>
+  <input id="connect" type='button' value='connect'/>
+  <label id="feedback">Ready to go</label>
+</body>
+</html>
