@@ -1,0 +1,43 @@
+{
+  "name": "brickhack2016",
+  "version": "1.0.0",
+  "description": "'Web app to help hosts choose recipies based on input from attendees'",
+  "main": "./src/server.js",
+  "scripts": {
+	"start": "node ./src/server.js",
+	"pretest": "jshint ./src",
+	"test": "echo 'complete'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caseyj/BrickHacks2016.git"
+  },
+  "keywords": [
+	"BrickHack2016",
+    "NPM",
+    "node",
+    "socket.io",
+	"JavaScript",
+	"API",
+    "Ajax",
+	"Python",
+    "Facebook",
+    "Yumly",
+    "SparkPost"
+  ],
+  "author": [
+	"Danny Lee",
+	"John Casey",
+	"Victoria School",
+	"Vic McGowen"
+  ],
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caseyj/BrickHacks2016/issues"
+  },
+  "homepage": "https://github.com/caseyj/BrickHacks2016#readme",
+  "devDependencies": {
+    "jshint": "^2.9.1",
+    "socket.io": "^1.4.5"
+  }
+}
