@@ -4,6 +4,12 @@ var socketio = require('socket.io');
 var indexPort = process.env.PORT || process.env.NODE_PORT || 3011;
 var index = fs.readFileSync(__dirname + '/../client/index.html');
 
+var server = http.createServer(function(request, response)
+  response.writeHead(200, {"Content-type" : "text/html"});
+  response.write(index);
+  response.end();
+}
+/*
 var server = http.createServer(function(request, response) {
   var filePath = false;
   if (request.url == '/') {
@@ -15,7 +21,6 @@ var server = http.createServer(function(request, response) {
   var absPath = "./" + filePath;
   serverWorking(response, absPath);
 });
-console.log(JSON.stringify(server.response));
 
 function serverWorking(response, absPath){
   fs.exists(absPath, function(exists){
@@ -46,6 +51,7 @@ function send404(response) {
   response.write("Error 404: resource not found");
   response.end();
 }
+*/
 
 var io = socketio(server);
 var users = [];
