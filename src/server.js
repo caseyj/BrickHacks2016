@@ -4,7 +4,7 @@ var socketio = require('socket.io');
 var indexPort = process.env.PORT || process.env.NODE_PORT || 3011;
 var index = fs.readFileSync(__dirname + '/../client/index.html');
 
-var server = http.createServer(function(request, response)
+function onRequest(request, responce){
   response.writeHead(200, {"Content-type" : "text/html"});
   response.write(index);
   response.end();
