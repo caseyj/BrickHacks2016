@@ -10,7 +10,7 @@ function onRequest(request, responce){
   response.end();
 }
 
-var app = http.createServer(onRequest).listen(port);
+var app = http.createServer(onRequest).listen(indexPort);
 /*
 var server = http.createServer(function(request, response) {
   var filePath = false;
