@@ -2,6 +2,12 @@ import numpy
 
 class Guest(object):
 
+	diets = numpy.asarray( ['Pescetarian','Lacto-ovo vegetarian', 'Lacto vegetarian', 'Ovo vegetaian', 'Vegan', 'Paleo'] )
+
+	allergies = numpy.asarray( ['Sesame-Free','Seafood-Free','Tree Nut-Free', \
+							'Peanut-Free', 'Egg-Free', 'Soy-Free', 'Gluten-Free', \
+									'Wheat-Free', 'Dairy-Free', 'Sulfite-Free'] )
+
 	def __init__(self, ID, name, pref, diet, allergy, exclude):
 		self._ID = ID
 		self._name = name
@@ -66,6 +72,18 @@ class Guest(object):
 	def diet(self):
 		del self.diet
 
+	def dietToString(self):
+		diet = []
+		output = ''
+		for d in range(self._diet.size):
+			if self._diet[d] == 1:
+				diet.append( self.diets[d] )
+
+		for i in range( len(diet) ):
+			output = diet[i] + ' ' + output
+
+		return output
+
 	##############################
 
 	@property
@@ -80,6 +98,18 @@ class Guest(object):
 	def allergy(self):
 		del self.allergy
 
+	def allergyToString(self):
+		allergy = []
+		output = ''
+		for d in range(self._allergy.size):
+			if self._allergy[d] == 1:
+				allergy.append( self.allergies[d] )
+
+		for i in range( len(allergy) ):
+			output = allergy[i] + ' ' + output
+
+		return output
+
 	##############################
 
 	@property
@@ -93,6 +123,12 @@ class Guest(object):
 	@exclude.deleter
 	def exclude(self):
 		del self.exclude
+
+	def excludeToString(self):
+		output = ''
+		for i in range( len(self._exclude) ):
+			output = self._exclude[i] + ' ' + output 
+		return output
 
 
 if __name__ == '__main__':
@@ -110,7 +146,7 @@ if __name__ == '__main__':
 	danny_allergy = numpy.asarray( [0,0,0,0,0,0,0,1,0,0] )
 
 	vic_exclude = numpy.asarray( ['Celery'] )
-	john_exclude = numpy.asarray( ['Beef'] )
+	john_exclude = numpy.asarray( ['Beef', 'Oatmeal'] )
 	victoria_exclude = numpy.asarray( [''] )
 	danny_exclude = numpy.asarray( ['Tomato'] )
 
@@ -124,4 +160,7 @@ if __name__ == '__main__':
 	print victoria.ID, victoria.name, victoria.pref, victoria.allergy, victoria.diet, victoria.exclude
 	print danny.ID, danny.name, danny.pref, danny.allergy, danny.diet, danny.exclude
 
+	print john.dietToString()
+	print john.allergyToString()
+	print john.excludeToString()
 
