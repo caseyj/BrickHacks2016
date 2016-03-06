@@ -23,24 +23,32 @@ def grouper(guestArray, totalNumber):
     
     # if 2 or less guests, make it a group
     if numberOfGuests <= 2:
-        group = Group()
-        return group 
+        guestIndices = [0,1]
+        guestListTemp = []
+        for i in guestIndices: 
+            guestListTemp.append(groupArray[i])
+        group = Group(guestListTemp)
+        groupList.append(group)
     
     # create empty array to store sum totals for each diet/allergy 
-    dietAndAllergies = numpy.zeros([numberOfGuests, 16])
+    diets = numpy.zeros([numberOfGuests, 6])
+    allergies = numpy.zeros([numberOfGuests,10])
+    
     # create empty array to store preferences
     preferences = numpy.zeros([numberOfGuests,5])
     
-    # loop through guest array, append diet/allergy vectors to array
+    # loop through guest array, append diet/allergy/preference data to respective arrays
     for i, guest in enumerate(guestArray): 
-        dietAndAllergies[i,:] = numpy.hstack((guest.diet,guest.allergy))
+        diets[i,:] = guest.diet
+        allergies[i:] = guest.allergy
         preferences[i,:] = guest.pref
     
     # calculate sum totals for each diet/allergy, and preference
-    dietAllergiesSum = numpy.sum(dietAndAllergies,0)
+    dietsSum = numpy.sum(diets,0)
+    allergiesSum = numpy.sum(allergies,0)
     preferencesSum = numpy.sum(preferences,0)
 
-    # if there are 4 or 5 of a single preference, make a group
+    # if there are 5 of a single preference, make a group
     if (preferencesSum==5).any(): 
         prefIndex = numpy.where(preferencesSum==5)[0][0]
         guestIndices = numpy.where(preferences[:,prefIndex]==1)[0]
@@ -50,6 +58,7 @@ def grouper(guestArray, totalNumber):
         group = Group(guestListTemp)
         groupList.append(group)
 
+    # if there are 4 of a single preference, make a group
     elif (preferencesSum==4).any(): 
         prefIndex = numpy.where(preferencesSum==4)[0][0]
         guestIndices = numpy.where(preferences[:,prefIndex]==1)[0]
@@ -58,23 +67,72 @@ def grouper(guestArray, totalNumber):
             guestListTemp.append(groupArray[i])
         group = Group(guestListTemp)
         groupList.append(group)
-
         
-    # IF 6, split it up. Base it off of ingredients they can't have.
-    
-    
-    # IF 7, then split 4 off and then deal with the 3. 
+    # if there are 3 of a single preference, make a group
+    elif (preferencesSum==3).any(): 
+        prefIndex = numpy.where(preferencesSum==3)[0][0]
+        guestIndices = numpy.where(preferences[:,prefIndex]==1)[0]
+        guestListTemp = []
+        for i in guestIndices: 
+            guestListTemp.append(groupArray[i])
+        group = Group(guestListTemp)
+        groupList.append(group)
         
+        
+    # if 6 have same preference, split up into 2 groups of 3
+    elif(preferencesSum==6).any(): 
+        
+        # check for 3 people with the same diet
+        if (dietsSum==3).any(): 
+            # make 2 groups
+        
+        # check for 3 people with the same allergies 
+        elif (allergiesSum==3).any(): 
+            # make 2 groups 
+            
+        # otherwise, arbitrarily split into 2 groups of 3
+        elif:
+            maxDietsSum = max(dietsSum)
+            maxAllergiesSum = max(allergiesSum) 
+            
+            ######## JOHN DO UR DICTIONARY THING HERE: #############################
+            maxExclusions = 'john do ur thing' 
+            # split into two groups of 3 based on maxAllergiesSum and maxDietsSum
+    
+    
+    # if 7 have same preference, split into 2 groups (of 4 and 3)       
+    elif (preferencesSum==7).any(): 
+        # check for 4 people with the same diet
+        if (dietsSum==4).any(): 
+            # make 2 groups, of 4 and 3 people
+        
+        # check for 4 people with the same allergies 
+        elif (allergiesSum==4).any(): 
+            # make 2 groups, of 4 and 3 people 
+
+        # otherwise, split arbitrarily into 2 groups, of 4 and 3 people 
+        elif:
+            maxDietsSum = max(dietsSum)
+            maxAllergiesSum = max(allergiesSum) 
+            
+            ######## JOHN DO UR DICTIONARY THING HERE: #############################
+            maxExclusions = 'john do ur thing' 
+            # split into two groups of 3 based on maxAllergiesSum and maxDietsSum
 
 
+    # if 8 people have same preferences
+    elif(preferencesSum>=8).any(): 
+        # check for 4 of anything
+        if (dietsSum==4).any(): 
+            # group these 4 people together 
+        elif (allergiesSum==4).any(): 
+            # group these 4 people together 
+            
+        ######## JOHN DO UR DICTIONARY THING HERE: #############################
+        #elif exclusions==4
+        
+        # recursive call 
 
-    
-    # elif any diet/allergy has 4, create a group
-    
-    # if there aren't 4, check if less than 4. If so, make a group. 
-    
-    # 
-    
     
     return 0
 
