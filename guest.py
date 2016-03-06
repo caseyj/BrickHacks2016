@@ -191,6 +191,7 @@ if __name__ == '__main__':
 	print john.allergyToString()
 	print john.excludeToString()
 	
+	print vic.allergyToString()
 
 	'''
 	dvic = vic.toDict()

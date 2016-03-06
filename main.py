@@ -6,6 +6,8 @@
 import json
 import sys
 from guest import *
+from grouper import *
+from Group import *
 
 def main():
     #take in name of json file from CL
@@ -26,6 +28,10 @@ def main():
     
     #here we will make a call to grouper
     
+    groups = grouper(guests, len(groups))
+    
     #here we will output our grouper results to json&return
+    with open('groupy.json', 'wb') as outfile:
+		json.dump(groups, outfile)
     
 if __name__ == "__main__": main()
