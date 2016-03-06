@@ -142,10 +142,12 @@ class Guest(object):
 		di = dict()
 		di['ID'] = self._ID
 		di['name'] = self._name
-		di['pref'] = self._pref
-		di['diet'] = self._diet
-		di['allergy'] = self._allergy
-		di['exclude'] = self._exclude
+		di['pref'] = list(self._pref)
+		di['diet'] = list(self._diet)
+		alList = list()
+		exList = list()
+		di['allergy'] = list(self._allergy)
+		di['exclude'] = list(self._exclude)
 		return di
 		
 	
@@ -189,13 +191,12 @@ if __name__ == '__main__':
 	print john.allergyToString()
 	print john.excludeToString()
 	
-	dvic = vic.toDict()
-	print(dvic)
-	print(json.dumps(dvic))
-'''
-	guestList = [vic, john, victoria, danny]
-	json.dumps(guestList)
 
-	with open('data.json', 'w') as outfile:
-		json.dumps(guestList, outfile)
+	'''
+	dvic = vic.toDict()
+	#json.dumps(dvic)
+	train = list([dvic, john.toDict(), victoria.toDict(), danny.toDict()])
+	
+	with open('data.json', 'wb') as outfile:
+		json.dump(train, outfile)
 	'''
