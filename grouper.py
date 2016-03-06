@@ -31,6 +31,8 @@ def grouper(guestArray, totalNumber):
 
     
     else: # create empty array to store sum totals for each diet/allergy 
+        #diets/allergies gets the number of zeroes for each of these to check 
+        #   for sim
         diets = numpy.zeros([numberOfGuests, 6])
         allergies = numpy.zeros([numberOfGuests,10])
         
@@ -77,24 +79,21 @@ def grouper(guestArray, totalNumber):
             if (dietsSum==3).any(): 
                 # make 1 group out of the 3 people with same diet
                 dietIndex = numpy.where(dietsSum==3)[0][0]
-                guestIndices = numpy.where(diets[:,dietIndex]==1)[0]
-                guestListTemp = [ ]
-                for i in guestIndices: 
-                    guestListTemp.append(guestArray[i])
-                group = Group(guestListTemp)
+                guestIndices = range(0,numberOfGuests)
+                groupList, guestArray = create_group(guestArray, guestIndices, useAll='True')
                 groupList.append(group)
                 
                 # determine the remaining guest indices for second group
                 remainingIndices = range(0,numberOfGuests)
-                for i in guestIndices: 
-                    remainingIndices.remove(i)
+                remGuest = guestArray
+                #removes selected from guestList, work with remGuest
+                for i in groupList:
+                    remGuest.remove(i)
                 
                 # put the other 3 people into a second group
-                guestListTemp = []
-                for i in remainingIndices: 
-                    guestListTemp.append(guestArray[i])
-                group = Group(guestListTemp)
+                group = Group(remGuest)
                 groupList.append(group)
+                
         
             
             # check for 3 people with the same allergies 
@@ -103,25 +102,21 @@ def grouper(guestArray, totalNumber):
                 # make 1 group out of the 3 people with same allergies
                 allergyIndex = numpy.where(allergiesSum==3)[0][0]
                 guestIndices = numpy.where(allergies[:,allergy]==1)[0]
-                guestListTemp = [ ]
-                for i in guestIndices: 
-                    guestListTemp.append(guestArray[i])
-                group = Group(guestListTemp)
+                guestIndices = range(0,numberOfGuests)
+                groupList, guestArray = create_group(guestArray, guestIndices, useAll='True')
                 groupList.append(group)
             
                 # determine the remaining guest indices for second group
                 remainingIndices = range(0,numberOfGuests)
-                for i in guestIndices: 
-                    remainingIndices.remove(i)
+                remGuest = guestArray
+                #removes selected from guestList, work with remGuest
+                for i in groupList:
+                    remGuest.remove(i)
                 
                 # put the other 3 people into a second group
-                guestListTemp = []
-                for i in remainingIndices: 
-                    guestListTemp.append(guestArray[i])
-                group = Group(guestListTemp)
+                group = Group(remGuest)
                 groupList.append(group)        
             
-                
             # otherwise, arbitrarily split into 2 groups of 3
             else:
                 maxDietsSum = max(dietsSum)
@@ -148,22 +143,19 @@ def grouper(guestArray, totalNumber):
                 # make 2 groups, of 4 and 3 people
                 dietIndex = numpy.where(dietsSum==4)[0][0]
                 guestIndices = numpy.where(diets[:,dietIndex]==1)[0]
-                guestListTemp = [ ]
-                for i in guestIndices: 
-                    guestListTemp.append(guestArray[i])
-                group = Group(guestListTemp)
+                guestIndices = range(0,numberOfGuests)
+                groupList, guestArray = create_group(guestArray, guestIndices, useAll='True')
                 groupList.append(group)
-                
+            
                 # determine the remaining guest indices for second group
                 remainingIndices = range(0,numberOfGuests)
-                for i in guestIndices: 
-                    remainingIndices.remove(i)
+                remGuest = guestArray
+                #removes selected from guestList, work with remGuest
+                for i in groupList:
+                    remGuest.remove(i)
                 
                 # put the other 3 people into a second group
-                guestListTemp = []
-                for i in remainingIndices: 
-                    guestListTemp.append(guestArray[i])
-                group = Group(guestListTemp)
+                group = Group(remGuest)
                 groupList.append(group)
             
             
@@ -172,26 +164,21 @@ def grouper(guestArray, totalNumber):
                 # make 2 groups, of 4 and 3 people 
                 allergyIndex = numpy.where(allergiesSum==4)[0][0]
                 guestIndices = numpy.where(allergies[:,allergy]==1)[0]
-                guestListTemp = [ ]
-                for i in guestIndices: 
-                    guestListTemp.append(guestArray[i])
-                group = Group(guestListTemp)
+                guestIndices = range(0,numberOfGuests)
+                groupList, guestArray = create_group(guestArray, guestIndices, useAll='True')
                 groupList.append(group)
             
                 # determine the remaining guest indices for second group
                 remainingIndices = range(0,numberOfGuests)
-                for i in guestIndices: 
-                    remainingIndices.remove(i)
+                remGuest = guestArray
+                #removes selected from guestList, work with remGuest
+                for i in groupList:
+                    remGuest.remove(i)
                 
                 # put the other 3 people into a second group
-                guestListTemp = []
-                for i in remainingIndices: 
-                    guestListTemp.append(guestArray[i])
-                group = Group(guestListTemp)
+                group = Group(remGuest)
                 groupList.append(group)  
-    return groupList
                 
-'''   
             # otherwise, split arbitrarily into 2 groups, of 4 and 3 people 
             elif:
                 maxDietsSum = max(dietsSum)
@@ -200,8 +187,7 @@ def grouper(guestArray, totalNumber):
                 ######## JOHN DO UR DICTIONARY THING HERE: #############################
                 maxExclusions = 'john do ur thing' 
                 # split into two groups of 3 based on maxAllergiesSum and maxDietsSum
-    
-        
+                
         #################################################################
         # if 8 people have same preferences
         elif(preferencesSum>=8).any(): 
@@ -267,7 +253,7 @@ def grouper(guestArray, totalNumber):
             
             # recursive call 
             g = grouper()
-'''
+    return groupList
     
 
 
@@ -290,8 +276,6 @@ def create_group(guestArray, guestIndices, groupList=[], useAll='True'):
         listTorem.append(g)
     #run through each object needed to be removed and remove it from the GL
     for i in range(len(listTorem)): 
-        print i
-        print guestIndices
         #pointer to object
         gRem = listTorem[i]
         #put that object into guest List temp
@@ -349,10 +333,13 @@ if __name__ == '__main__':
     john = Guest( '8675', 'John', john_pref, john_diet, john_allergy, john_exclude)
     victoria = Guest( '1234', 'Victoria', victoria_pref, victoria_diet, victoria_allergy, victoria_exclude )
     danny = Guest( '8881', 'Danny', danny_pref, danny_diet, danny_allergy, danny_exclude )
+    d2 = Guest( '8881', 'D2', danny_pref, danny_diet, danny_allergy, john_exclude )
     
-    guestArray = [vic, john, victoria, danny]
+    guestArray = [vic, john, victoria, danny, d2]
     
     g = grouper( guestArray, len(guestArray) )
+    
+    print g[0].names
     
 
 
