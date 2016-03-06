@@ -4,19 +4,20 @@
 ##############
 
 import json
-
+import sys
 
 def main():
     #take in name of json file from CL
-    fileName = sys.argv[0]
-    
+    fileName = sys.argv[1]
+    print fileName
     guests = list()
     
-    with open(fileName) as json_file:
+    with open(fileName, 'r') as json_file:
         json_data = json.load(json_file)
     
-    for i in range(json_data):
-        print json_data[i]['']
+    guests = list
+    for i in json_data:
+        print i['pref']
     
     
     # preference first
