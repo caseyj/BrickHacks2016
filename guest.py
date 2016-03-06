@@ -1,4 +1,3 @@
-import numpy
 
 
 import json
@@ -6,13 +5,13 @@ import io
 
 class Guest(object):
 
-	preferences = numpy.asarray( ['Beef','Chicken','Plant based','Pork','Seafood'] )
+	preferences = ['Beef','Chicken','Plant based','Pork','Seafood']
 
-	diets = numpy.asarray( ['Pescetarian','Lacto-ovo vegetarian', 'Lacto vegetarian', 'Ovo vegetaian', 'Vegan', 'Paleo'] )
+	diets = ['Pescetarian','Lacto-ovo vegetarian', 'Lacto vegetarian', 'Ovo vegetaian', 'Vegan', 'Paleo']
 
-	allergies = numpy.asarray( ['Sesame-Free','Seafood-Free','Tree Nut-Free', \
+	allergies = ['Sesame-Free','Seafood-Free','Tree Nut-Free', \
 							'Peanut-Free', 'Egg-Free', 'Soy-Free', 'Gluten-Free', \
-									'Wheat-Free', 'Dairy-Free', 'Sulfite-Free'] )
+									'Wheat-Free', 'Dairy-Free', 'Sulfite-Free']
 
 	def __init__(self, ID, name, pref, diet, allergy, exclude):
 		self._ID = ID
@@ -81,7 +80,7 @@ class Guest(object):
 	def dietToString(self):
 		diet = []
 		output = ''
-		for d in range(self._diet.size):
+		for d in range( len(self._diet) ):
 			if self._diet[d] == 1:
 				diet.append( self.diets[d] )
 
@@ -107,7 +106,7 @@ class Guest(object):
 	def allergyToString(self):
 		allergy = []
 		output = ''
-		for d in range(self._allergy.size):
+		for d in range( len(self._allergy) ):
 			if self._allergy[d] == 1:
 				allergy.append( self.allergies[d] )
 
@@ -144,8 +143,6 @@ class Guest(object):
 		di['name'] = self._name
 		di['pref'] = list(self._pref)
 		di['diet'] = list(self._diet)
-		alList = list()
-		exList = list()
 		di['allergy'] = list(self._allergy)
 		di['exclude'] = list(self._exclude)
 		return di
@@ -155,27 +152,27 @@ class Guest(object):
 
 if __name__ == '__main__':
 	# beef, chicken, plant based, pork, seafood
-	vic_pref = numpy.asarray([0,0,1,0,0])
-	john_pref = numpy.asarray([0,0,0,1,0])
-	victoria_pref = numpy.asarray([0,1,0,0,0])
-	danny_pref = numpy.asarray([1,0,0,0,0])
+	vic_pref = [0,0,1,0,0]
+	john_pref = [0,0,0,1,0]
+	victoria_pref = [0,1,0,0,0]
+	danny_pref = [1,0,0,0,0]
 	
 	# pescetarian, vegetarian, laco vegetarian, ovo vegetarian, vegan, paleo
-	vic_diet = numpy.asarray( [0,0,0,0,1,0] )
-	john_diet = numpy.asarray( [0,0,0,0,0,0] )
-	victoria_diet = numpy.asarray( [0,0,0,0,0,0] )
-	danny_diet = numpy.asarray( [0,0,0,0,0,0] )
+	vic_diet = [0,0,0,0,1,0]
+	john_diet =  [0,0,0,0,0,0]
+	victoria_diet = [0,0,0,0,0,0]
+	danny_diet = [0,0,0,0,0,0]
 
 	# sesame, seafood, treenut, peanut, egg, soy, gluten, wheat, dairy, sulfite 
-	vic_allergy = numpy.asarray( [0,0,0,0,0,0,0,0,1,0] )
-	john_allergy = numpy.asarray( [0,0,1,1,0,1,0,0,1,0] )
-	victoria_allergy = numpy.asarray( [0,0,0,0,0,0,0,0,0,0] )
-	danny_allergy = numpy.asarray( [0,0,0,0,0,0,0,1,0,0] )
+	vic_allergy = [0,0,0,0,0,0,0,0,1,0] 
+	john_allergy = [0,0,1,1,0,1,0,0,1,0]
+	victoria_allergy = [0,0,0,0,0,0,0,0,0,0] 
+	danny_allergy = [0,0,0,0,0,0,0,1,0,0] 
 
-	vic_exclude = numpy.asarray( ['Celery'] )
-	john_exclude = numpy.asarray( ['Beef', 'Oatmeal'] )
-	victoria_exclude = numpy.asarray( [''] )
-	danny_exclude = numpy.asarray( ['Tomato'] )
+	vic_exclude =  ['Celery']
+	john_exclude = ['Beef', 'Oatmeal'] 
+	victoria_exclude = []
+	danny_exclude = ['Tomato']
 
 	vic = Guest( '9999', 'Vic', vic_pref, vic_diet, vic_allergy, vic_exclude )
 	john = Guest( '8675', 'John', john_pref, john_diet, john_allergy, john_exclude)
@@ -193,11 +190,9 @@ if __name__ == '__main__':
 	
 	print vic.allergyToString()
 
-	'''
 	dvic = vic.toDict()
 	#json.dumps(dvic)
 	train = list([dvic, john.toDict(), victoria.toDict(), danny.toDict()])
 	
 	with open('data.json', 'wb') as outfile:
 		json.dump(train, outfile)
-	'''

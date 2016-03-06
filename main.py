@@ -6,7 +6,7 @@
 import json
 import sys
 from guest import *
-from grouper import *
+#from grouper import *
 from Group import *
 
 def main():
@@ -27,11 +27,47 @@ def main():
         guests.append(g)
     
     #here we will make a call to grouper
+	########################################
+    # beef, chicken, plant based, pork, seafood
+	vic_pref = [0,0,1,0,0]
+	john_pref = [0,0,0,1,0]
+	victoria_pref = [0,1,0,0,0]
+	danny_pref = [1,0,0,0,0]
+	
+	# pescetarian, vegetarian, laco vegetarian, ovo vegetarian, vegan, paleo
+	vic_diet = [0,0,0,0,1,0]
+	john_diet =  [0,0,0,0,0,0]
+	victoria_diet = [0,0,0,0,0,0]
+	danny_diet = [0,0,0,0,0,0]
+
+	# sesame, seafood, treenut, peanut, egg, soy, gluten, wheat, dairy, sulfite 
+	vic_allergy = [0,0,0,0,0,0,0,0,1,0] 
+	john_allergy = [0,0,1,1,0,1,0,0,1,0]
+	victoria_allergy = [0,0,0,0,0,0,0,0,0,0] 
+	danny_allergy = [0,0,0,0,0,0,0,1,0,0] 
+
+	vic_exclude =  ['Celery']
+	john_exclude = ['Beef', 'Oatmeal'] 
+	victoria_exclude = []
+	danny_exclude = ['Tomato']
+
+	vic = Guest( '9999', 'Vic', vic_pref, vic_diet, vic_allergy, vic_exclude )
+	john = Guest( '8675', 'John', john_pref, john_diet, john_allergy, john_exclude)
+	victoria = Guest( '1234', 'Victoria', victoria_pref, victoria_diet, victoria_allergy, victoria_exclude )
+	danny = Guest( '8881', 'Danny', danny_pref, danny_diet, danny_allergy, danny_exclude )
+
+	a = Group([vic, john, victoria, danny]).toDictGroup()
+    b = Group([vic, victoria]).toDictGroup()
+    c = Group([danny, john, victoria]).toDictGroup()
+    d = Group([danny]).toDictGroup()
+	########################################
     
-    groups = grouper(guests, len(groups))
+    groups = [ a, b, c, d] 
+    #groups = grouper(guests, len(groups))
     
     #here we will output our grouper results to json&return
     with open('groupy.json', 'wb') as outfile:
-		json.dump(groups, outfile)
+        #groups = groups[0].pref
+        json.dump(groups, outfile)
     
 if __name__ == "__main__": main()
