@@ -4,14 +4,32 @@
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Event</title>
     <script>
-      var eventID = gup('id', window.location.href);
+      var eventID = gup('eventId', window.location.href);
+      var numParticipants = gup('numParticipants', window.location.href);
+      var participantIdList = [];
+      for(var i = 0; i < numParticipants; i++){
+        var tempLog = 'participantId' + i;
+        var tempParticipant = gup(tempLog, window.location.href);
+        participantIdList.push(tempParticipant);
+      }
 
+      console.log(eventID);
+      console.log(numParticipants);
+      console.log(participantIdList);
+
+      function gup( name, url ) {
+        if (!url) url = location.href;
+        name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+        var regexS = "[\\?&]"+name+"=([^&#]*)";
+        var regex = new RegExp( regexS );
+        var results = regex.exec( url );
+        return results == null ? null : results[1];
+      }
     </script>
   </head>
   <body>
-    <label>What kind of recipies:</label>
-    <input id="recipes" type="text" value=""/>
-    <input id="connect" type='button' value='connect'/>
-    <label id="feedback">Ready to go</label>
+    <div>
+      <h1>Something</h1>
+    </div>
   </body>
 </html>

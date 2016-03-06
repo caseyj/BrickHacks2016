@@ -3,15 +3,22 @@
   <head>
     <title>Facebook Login</title>
     <meta charset="UTF-8">
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <script>
+      var socket;
       var isConnected = false;
+      window.onload = init;
+
+      function init(){
+        socket = io.connect();
+      }
 
       function statusChangeCallback(response) {
-        console.log('statusChangeCallback');
+        console.log("statusChangeCallback");
         if (response.status === 'connected') {
-          testAPI();
+          testAPI(response);
         } else if (response.status === 'not_authorized') {
           document.getElementById('status').innerHTML = 'Please log ' +
             'into this app.';
@@ -22,12 +29,14 @@
       }
 
       function checkLoginState() {
+        console.log("checkLoginState");
         FB.getLoginStatus(function(response) {
           statusChangeCallback(response);
         });
       }
 
       window.fbAsyncInit = function() {
+        console.log("window.fbAsyncInit");
         FB.init({
           appId      : '1577600392565490',
           cookie     : true,  // enable cookies to allow the server to access
@@ -37,6 +46,7 @@
         });
 
         FB.getLoginStatus(function(response) {
+          console.log("getLoginStatus");
           statusChangeCallback(response);
         });
       };
@@ -50,8 +60,9 @@
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
 
-      function testAPI() {
-        console.log('Welcome!  Fetching your information.... ');
+      function testAPI(response) {
+        console.log("testAPI");
+        var eventList;
         FB.getAuthResponse();
         FB.api('/me', function(response) {
           console.log('Successful login for: ' + response.name);
@@ -68,7 +79,7 @@
               return;
             }
 
-            var eventList = response.events.data;
+            eventList = response.events.data;
             for(var i = eventList.length - 1; i >= 0; i--){
               if(!eventList[i].is_viewer_admin){
                 eventList.splice(i, 1);
@@ -76,21 +87,22 @@
             }
 
             for(var u = 0; u < eventList.length; u++){
-              var hrefLink = 'Event.html';
+              var hrefLink = 'http://foodlecrew.herokuapp.com/client/Event.html';
               var name = eventList[u].name;
               var participants =  "";
 
               for(var t = 0; t < eventList[u].attending.data.length; t++){
                 var participantID = eventList[u].attending.data[t].id;
-                participants += '&participantID' + t + "=" + participantID;
+                participants += '&participantId' + t + "=" + participantID;
               }
 
-              console.log(eventList[u].id);
               hrefLink += '?eventId=' + eventList[u].id;
+              hrefLink += '&numParticipants=' + eventList[u].attending.data.length;
               hrefLink += participants;
 
               var htmlLine = "";
-              htmlLine += "<div class='event' onclick=location.href=" + "'" + hrefLink + "'" + ">";
+              htmlLine += "<div class='event' onclick=location.href=" + "'" + hrefLink + "' target=_parent" + ">";
+              console.log("<div class='event' onclick=location.href=" + "'" + hrefLink + "' target=_parent" + ">");
               htmlLine += "<small><h4>" + name + "</h4></small>";
               htmlLine += "</div>";
 
@@ -99,10 +111,16 @@
             isConnected = true;
           }
         );
+        loginToServer({id:response.id, eventList:eventList});
+      }
+
+      function loginToServer(data){
+        console.log("loginToServer");
+        socket.emit('loginToServer', data);
       }
     </script>
 
-    <fb:login-button scope="public_profile,user_events" onlogin="checkLoginState();">
+    <fb:login-button scope="public_profile,email,user_events" onlogin="checkLoginState();">
     </fb:login-button>
 
     <div id="status">
