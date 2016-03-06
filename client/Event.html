@@ -4,18 +4,23 @@
     <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
     <title>Event</title>
     <script>
-      var eventID = gup('eventId', window.location.href);
-      var numParticipants = gup('numParticipants', window.location.href);
-      var participantIdList = [];
-      for(var i = 0; i < numParticipants; i++){
-        var tempLog = 'participantId' + i;
-        var tempParticipant = gup(tempLog, window.location.href);
-        participantIdList.push(tempParticipant);
-      }
+      window.onload = init;
 
-      console.log(eventID);
-      console.log(numParticipants);
-      console.log(participantIdList);
+      function init(){
+        var eventID = gup('eventId', window.location.href);
+        document.querySelector("#eventIDoutput").innerHTML = "Event ID: " + eventID;
+
+        var numParticipants = gup('numParticipants', window.location.href);
+        document.querySelector("#numParticipantsoutput").innerHTML = "Number of Attendees: " + numParticipants;
+
+        var participantIdList = [];
+        for(var i = 0; i < numParticipants; i++){
+          var tempLog = 'participantId' + i;
+          var tempParticipant = gup(tempLog, window.location.href);
+          participantIdList.push(tempParticipant);
+          document.querySelector("#listOfParticipants").innerHTML += "<li>" + "Attendee ID: " + tempParticipant + "</li>";
+        }
+      }
 
       function gup( name, url ) {
         if (!url) url = location.href;
@@ -26,10 +31,18 @@
         return results == null ? null : results[1];
       }
     </script>
+    <style>
+    h1,h2,li{
+      color: #3B5998;
+    }
+    </style>
   </head>
   <body>
     <div>
-      <h1>Something</h1>
+      <h1 id="eventIDoutput"></h1>
+      <h2 id="numParticipantsoutput"></h2>
+      <ul id="listOfParticipants">
+      </ul>
     </div>
   </body>
 </html>

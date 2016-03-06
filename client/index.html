@@ -4,6 +4,19 @@
     <title>Facebook Login</title>
     <meta charset="UTF-8">
     <script src="/socket.io/socket.io.js"></script>
+    <style>
+      header{
+        text-align: center;
+        margin: 10px;
+        padding: 10px;
+      }
+      .event{
+        margin: 10px;
+        padding: 10px;
+        border-style: solid;
+        border-color: #3B5998;
+      }
+    </style>
   </head>
   <body>
     <script>
@@ -16,7 +29,6 @@
       }
 
       function statusChangeCallback(response) {
-        console.log("statusChangeCallback");
         if (response.status === 'connected') {
           testAPI(response);
         } else if (response.status === 'not_authorized') {
@@ -29,14 +41,12 @@
       }
 
       function checkLoginState() {
-        console.log("checkLoginState");
         FB.getLoginStatus(function(response) {
           statusChangeCallback(response);
         });
       }
 
       window.fbAsyncInit = function() {
-        console.log("window.fbAsyncInit");
         FB.init({
           appId      : '1577600392565490',
           cookie     : true,  // enable cookies to allow the server to access
@@ -46,7 +56,6 @@
         });
 
         FB.getLoginStatus(function(response) {
-          console.log("getLoginStatus");
           statusChangeCallback(response);
         });
       };
@@ -61,7 +70,6 @@
       }(document, 'script', 'facebook-jssdk'));
 
       function testAPI(response) {
-        console.log("testAPI");
         var eventList;
         FB.getAuthResponse();
         FB.api('/me', function(response) {
@@ -87,7 +95,7 @@
             }
 
             for(var u = 0; u < eventList.length; u++){
-              var hrefLink = 'http://foodlecrew.herokuapp.com/client/Event.html';
+              var hrefLink = 'Event.html';
               var name = eventList[u].name;
               var participants =  "";
 
@@ -102,7 +110,6 @@
 
               var htmlLine = "";
               htmlLine += "<div class='event' onclick=location.href=" + "'" + hrefLink + "' target=_parent" + ">";
-              console.log("<div class='event' onclick=location.href=" + "'" + hrefLink + "' target=_parent" + ">");
               htmlLine += "<small><h4>" + name + "</h4></small>";
               htmlLine += "</div>";
 
@@ -115,15 +122,15 @@
       }
 
       function loginToServer(data){
-        console.log("loginToServer");
         socket.emit('loginToServer', data);
       }
     </script>
+    <div id="header">
+      <fb:login-button scope="public_profile,email,user_events" onlogin="checkLoginState();">
+      </fb:login-button>
 
-    <fb:login-button scope="public_profile,email,user_events" onlogin="checkLoginState();">
-    </fb:login-button>
-
-    <div id="status">
+      <div id="status">
+      </div>
     </div>
 
     <div id="dynamicContent">
