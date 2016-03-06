@@ -28,7 +28,8 @@ def grouper(guestArray, totalNumber):
     if numberOfGuests <= 2:
         guestIndices = range(0,numberOfGuests)
         groupList, guestArray = create_group(guestArray, guestIndices, useAll='False')
-
+        return groupList
+    
     
     else: # create empty array to store sum totals for each diet/allergy 
         #diets/allergies gets the number of zeroes for each of these to check 
@@ -49,7 +50,7 @@ def grouper(guestArray, totalNumber):
         dietsSum = numpy.sum(diets,0)
         allergiesSum = numpy.sum(allergies,0)
         preferencesSum = numpy.sum(preferences,0)
-    
+        #print preferencesSum
     
         ################################################################# 
         # if 5 have same preference, group them
@@ -64,12 +65,14 @@ def grouper(guestArray, totalNumber):
             #prefIndex = numpy.where(preferencesSum==4)[0][0]
             guestIndices = range( len(guestArray) )
             groupList, guestArray = create_group(guestArray, guestIndices, useAll='False')
+            return groupList
             
         # if there are 3 of a single preference, make a group
-        elif (preferencesSum==3).any(): 
+        elif (preferencesSum<=3).any(): 
             #prefIndex = numpy.where(preferencesSum==3)[0][0]
             guestIndices = range(len(guestArray))
             groupList, guestArray = create_group(guestArray, guestIndices, useAll='False')
+            return groupList
         
         #################################################################    
         # 6 have same preference, split up into 2 groups of 3
@@ -94,20 +97,9 @@ def grouper(guestArray, totalNumber):
             
             # otherwise, arbitrarily split into 2 groups of 3
             else:
-                maxDietsSum = max(dietsSum)
-                maxAllergiesSum = max(allergiesSum) 
-                
-                ######## JOHN DO UR DICTIONARY THING HERE: #############################
-                dic = dict()
-                for i in groupList:
-                    for j in i.exclusions:
-                        if j in dic:
-                            dic[j] = dic[j] + 1
-                        else:
-                            dic[j] = 1
-                            # TODO: write code...
-                maxExclusions = 'john do ur thing' 
-                # split into two groups of 3 based on maxAllergiesSum and maxDietsSum
+                guestIndices = range((guestArray/2))
+                groupList, guestArray = create_group(guestArray, guestIndices, useAll='True')
+                return groupLists
         
         #################################################################
         # 7 have same preference: split into 2 groups (f 4 and 3)
@@ -132,26 +124,28 @@ def grouper(guestArray, totalNumber):
                 
             # otherwise, split arbitrarily into 2 groups, of 4 and 3 people 
             else:
-                maxDietsSum = max(dietsSum)
-                maxAllergiesSum = max(allergiesSum) 
+                
+                guestIndices = range((guestArray/2))
+                groupList, guestArray = create_group(guestArray, guestIndices, useAll='True')
+                return groupList
                 
                 ######## JOHN DO UR DICTIONARY THING HERE: #############################
-                maxExclusions = 'john do ur thing' 
+                #maxExclusions = 'john do ur thing' 
                 # split into two groups of 3 based on maxAllergiesSum and maxDietsSum
                 
         #################################################################
         # if 8 people have same preferences
         elif(preferencesSum>=8).any(): 
-            
+            print 8
             # check for 4 of anything, starting with diet
             if (dietsSum==4).any(): 
+                print 'in here'
                 # make 2 groups, of 4 and 3 people
                 dietIndex = numpy.where(dietsSum==4)[0][0]
                 guestIndices = numpy.where(diets[:,dietIndex]==1)[0]
-                guestIndices = range(0,numberOfGuests)
                 groupList, guestArray = create_group(guestArray, guestIndices, useAll='True')
-                groupList.append(group)
-            
+                
+                print groupList
                 # determine the remaining guest indices for second group
                 remainingIndices = range(0,numberOfGuests)
                 remGuest = guestArray
@@ -165,13 +159,14 @@ def grouper(guestArray, totalNumber):
             
             # check for 4 with the same allergy 
             elif (allergiesSum==4).any(): 
+                print 'in here'
                 # make 2 groups, of 4 and 3 people 
                 allergyIndex = numpy.where(allergiesSum==4)[0][0]
                 guestIndices = numpy.where(allergies[:,allergyIndex]==1)[0]
-                guestIndices = range(0,numberOfGuests)
                 groupList, guestArray = create_group(guestArray, guestIndices, useAll='True')
-                groupList.append(group)
-            
+                #groupList.append(group)
+                print groupList
+                
                 # determine the remaining guest indices for second group
                 remainingIndices = range(0,numberOfGuests)
                 remGuest = guestArray
@@ -183,7 +178,10 @@ def grouper(guestArray, totalNumber):
                 group = Group(remGuest)
                 groupList.append(group)           
             
-            
+            else:
+                guestIndices = range((len(guestArray)/2))
+                groupList, guestArray = create_group(guestArray, guestIndices, useAll='True')
+                return groupList
             
             ######## JOHN DO UR DICTIONARY THING HERE: #############################
             #elif exclusions==4

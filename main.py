@@ -62,15 +62,19 @@ def main():
     victoria = Guest( '1234', 'Victoria', victoria_pref, victoria_diet, victoria_allergy, victoria_exclude )
     danny = Guest( '8881', 'Danny', danny_pref, danny_diet, danny_allergy, danny_exclude )
     d5 = Guest( '8881', 'D5', danny_pref, danny_diet, danny_allergy, john_exclude )
-    d4 = Guest( '8881', 'D4', danny_pref, danny_diet, danny_allergy, john_exclude )
-    d3 = Guest( '8881', 'D3', danny_pref, danny_diet, danny_allergy, john_exclude )
+    d4 = Guest( '8881', 'D4', vic_pref, danny_diet, danny_allergy, john_exclude )
+    d3 = Guest( '8881', 'D3', vic_pref, danny_diet, danny_allergy, john_exclude )
+    d2 = Guest( '8881', 'D3', vic_pref, danny_diet, danny_allergy, john_exclude )
+    d1 = Guest( '8881', 'D3', danny_pref, danny_diet, danny_allergy, john_exclude )
+    d6 = Guest( '8881', 'D3', danny_pref, danny_diet, danny_allergy, john_exclude )
+    guestArray = [vic, john, victoria, danny, d5, d4, d3, d4, d5, d6, d1, d2]
     
-    guestArray = [vic, john, victoria, danny, d5, d4, d3]
     
-    g = grouper( guestArray, len(guestArray) )
-    print g
+    GL = grouper( guests, len(guests) )
+    print GL
+	
     dList = list()
-    for i in g:
+    for i in GL:
     	dList.append(i.toDictGroup())
     #here we will output our grouper results to json&return
     with open('groupy.json', 'wb') as outfile:
