@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Facebook Login</title>
+    <meta charset="UTF-8">
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+      header{
+        text-align: center;
+        margin: 10px;
+        padding: 10px;
+      }
+      .event{
+        margin: 10px;
+        padding: 10px;
+        border-style: solid;
+        border-color: #3B5998;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      var socket;
+      var isConnected = false;
+      window.onload = init;
+
+      function init(){
+        socket = io.connect();
+      }
+
+      function statusChangeCallback(response) {
+        if (response.status === 'connected') {
+          testAPI(response);
+        } else if (response.status === 'not_authorized') {
+          document.getElementById('status').innerHTML = 'Please log ' +
+            'into this app.';
+        } else {
+          document.getElementById('status').innerHTML = 'Please log ' +
+            'into Facebook.';
+        }
+      }
+
+      function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+          statusChangeCallback(response);
+        });
+      }
+
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '1577600392565490',
+          cookie     : true,  // enable cookies to allow the server to access
+                              // the session
+          xfbml      : true,  // parse social plugins on this page
+          version    : 'v2.5' // use graph api version 2.5
+        });
+
+        FB.getLoginStatus(function(response) {
+          statusChangeCallback(response);
+        });
+      };
+
+      // Load the SDK asynchronously
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+
+      function testAPI(response) {
+        var eventList;
+        FB.getAuthResponse();
+        FB.api('/me', function(response) {
+          console.log('Successful login for: ' + response.name);
+          document.getElementById('status').innerHTML =
+            'Thanks for logging in, ' + response.name + '!';
+        });
+
+        FB.api(
+          '/me',
+          'GET',
+          {"fields":"id,name,events{name,id,is_viewer_admin,attending}"},
+          function(response){
+            if(isConnected){
+              return;
+            }
+
+            eventList = response.events.data;
+            for(var i = eventList.length - 1; i >= 0; i--){
+              if(!eventList[i].is_viewer_admin){
+                eventList.splice(i, 1);
+              }
+            }
+
+            for(var u = 0; u < eventList.length; u++){
+              var hrefLink = 'Event.html';
+              var name = eventList[u].name;
+              var participants =  "";
+
+              for(var t = 0; t < eventList[u].attending.data.length; t++){
+                var participantID = eventList[u].attending.data[t].id;
+                participants += '&participantId' + t + "=" + participantID;
+              }
+
+              hrefLink += '?eventId=' + eventList[u].id;
+              hrefLink += '&numParticipants=' + eventList[u].attending.data.length;
+              hrefLink += participants;
+
+              var htmlLine = "";
+              htmlLine += "<div class='event' onclick=location.href=" + "'" + hrefLink + "' target=_parent" + ">";
+              htmlLine += "<small><h4>" + name + "</h4></small>";
+              htmlLine += "</div>";
+
+              document.querySelector("#dynamicContent").innerHTML = document.querySelector("#dynamicContent").innerHTML + htmlLine;
+            }
+            isConnected = true;
+          }
+        );
+        loginToServer({id:response.id, eventList:eventList});
+      }
+
+      function loginToServer(data){
+        socket.emit('loginToServer', data);
+      }
+    </script>
+    <div id="header">
+      <fb:login-button scope="public_profile,email,user_events" onlogin="checkLoginState();">
+      </fb:login-button>
+
+      <div id="status">
+      </div>
+    </div>
+
+    <div id="dynamicContent">
+    </div>
+
+  </body>
+</html>
