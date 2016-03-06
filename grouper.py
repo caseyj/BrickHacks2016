@@ -53,33 +53,21 @@ def grouper(guestArray, totalNumber):
         # if 5 have same preference, group them
         if (preferencesSum==5).any(): 
             prefIndex = numpy.where(preferencesSum==5)[0][0]
-            guestIndices = numpy.where(preferences[:,prefIndex]==1)[0]
-            guestListTemp = [ ]
-            for i in guestIndices: 
-                guestListTemp.append(guestArray[i])
-            group = Group(guestListTemp)
-            groupList.append(group)
+            guestIndices = range(0,numberOfGuests)
+            groupList, guestArray = create_group(guestArray, guestIndices, useAll='False')
             
         ################################################################# 
         # if there are 4 of a single preference, make a group
         elif (preferencesSum==4).any(): 
             prefIndex = numpy.where(preferencesSum==4)[0][0]
-            guestIndices = numpy.where(preferences[:,prefIndex]==1)[0]
-            guestListTemp = [ ]
-            for i in guestIndices: 
-                guestListTemp.append(guestArray[i])
-            group = Group(guestListTemp)
-            groupList.append(group)
+            guestIndices = range(0,numberOfGuests)
+            groupList, guestArray = create_group(guestArray, guestIndices, useAll='False')
             
         # if there are 3 of a single preference, make a group
         elif (preferencesSum==3).any(): 
             prefIndex = numpy.where(preferencesSum==3)[0][0]
-            guestIndices = numpy.where(preferences[:,prefIndex]==1)[0]
-            guestListTemp = [ ]
-            for i in guestIndices: 
-                guestListTemp.append(guestArray[i])
-            group = Group(guestListTemp)
-            groupList.append(group)
+            guestIndices = range(0,numberOfGuests)
+            groupList, guestArray = create_group(guestArray, guestIndices, useAll='False')
         
         #################################################################    
         # 6 have same preference, split up into 2 groups of 3
@@ -201,8 +189,9 @@ def grouper(guestArray, totalNumber):
                     guestListTemp.append(guestArray[i])
                 group = Group(guestListTemp)
                 groupList.append(group)  
+    return groupList
                 
-    
+'''   
             # otherwise, split arbitrarily into 2 groups, of 4 and 3 people 
             elif:
                 maxDietsSum = max(dietsSum)
@@ -278,8 +267,8 @@ def grouper(guestArray, totalNumber):
             
             # recursive call 
             g = grouper()
+'''
     
-    return groupList
 
 
 
@@ -291,18 +280,37 @@ def create_group(guestArray, guestIndices, groupList=[], useAll='True'):
     get grouped together into a second group (which then gets appended onto groupList). 
     Otherwise, the remaining guests are left in guestArray for future grouping.
     """
-
-    for i in guestIndices: 
-        guestListTemp.append(guestArray[i])
+    guestListTemp = list()
+    #the pointers to all of the objects needed to be removed
+    listTorem = list()
+    
+    #add all the pointers of the objects needed to be removed to the holding arr
+    for i in guestIndices:
+        g = guestArray[i]
+        listTorem.append(g)
+    #run through each object needed to be removed and remove it from the GL
+    for i in range(len(listTorem)): 
+        print i
+        print guestIndices
+        #pointer to object
+        gRem = listTorem[i]
+        #put that object into guest List temp
+        guestListTemp.append(gRem)
+        #If we are using everything
         if useAll: 
-            guestArray.remove(i)
-        group = Group(guestListTemp)
-        groupList.append(group)
-    
+            #remove it from the guestArray
+            guestArray.remove(gRem)
+    #create a group for this guest List
+    group = Group(guestListTemp)
+    #append it to our returning list
+    groupList.append(group)
+    #if we are using everything
     if useAll: 
+        #make a group from the remnants
         group = Group(guestArray)
+        #append it to our returning thingy
         groupList.append(group)
-    
+    #return our t
     return groupList, guestArray
     
 
