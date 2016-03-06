@@ -9,6 +9,8 @@ function onRequest(request, responce){
   response.write(index);
   response.end();
 }
+
+var app = http.createServer(onRequest).listen(port);
 /*
 var server = http.createServer(function(request, response) {
   var filePath = false;
@@ -53,7 +55,7 @@ function send404(response) {
 }
 */
 
-var io = socketio(server);
+var io = socketio(app);
 var users = [];
 
 io.sockets.on('connection', function(socket){
