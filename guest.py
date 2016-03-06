@@ -1,5 +1,9 @@
 import numpy
 
+
+import json
+import io
+
 class Guest(object):
 
 	preferences = numpy.asarray( ['Beef','Chicken','Plant based','Pork','Seafood'] )
@@ -131,6 +135,20 @@ class Guest(object):
 		for i in range( len(self._exclude) ):
 			output = self._exclude[i] + ' ' + output 
 		return output
+	
+	##############################
+	
+	def toDict(self):
+		di = dict()
+		di['ID'] = self._ID
+		di['name'] = self._name
+		di['pref'] = self._pref
+		di['diet'] = self._diet
+		di['allergy'] = self._allergy
+		di['exclude'] = self._exclude
+		return di
+		
+	
 
 
 if __name__ == '__main__':
@@ -170,4 +188,14 @@ if __name__ == '__main__':
 	print john.dietToString()
 	print john.allergyToString()
 	print john.excludeToString()
+	
+	dvic = vic.toDict()
+	print(dvic)
+	print(json.dumps(dvic))
+'''
+	guestList = [vic, john, victoria, danny]
+	json.dumps(guestList)
 
+	with open('data.json', 'w') as outfile:
+		json.dumps(guestList, outfile)
+	'''
