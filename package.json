@@ -2,34 +2,34 @@
   "name": "brickhack2016",
   "version": "1.0.0",
   "description": "'Web app to help hosts choose recipies based on input from attendees'",
-  "main": "./src/server.js",
+  "main": "./src/app.js",
   "scripts": {
-	"start": "node ./src/server.js",
-	"pretest": "jshint ./src",
-	"test": "echo 'complete'"
+    "start": "node ./src/app.js",
+    "pretest": "jshint ./src",
+    "test": "echo \"Tests Complete\""
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/caseyj/BrickHacks2016.git"
   },
   "keywords": [
-	"BrickHack2016",
+    "BrickHack2016",
     "NPM",
     "node",
     "socket.io",
-	"JavaScript",
-	"API",
+    "JavaScript",
+    "API",
     "Ajax",
-	"Python",
+    "Python",
     "Facebook",
     "Yumly",
     "SparkPost"
   ],
   "author": [
-	"Danny Lee",
-	"John Casey",
-	"Victoria School",
-	"Vic McGowen"
+    "Danny Lee",
+    "John Casey",
+    "Victoria School",
+    "Vic McGowen"
   ],
   "license": "ISC",
   "bugs": {
@@ -37,7 +37,18 @@
   },
   "homepage": "https://github.com/caseyj/BrickHacks2016#readme",
   "devDependencies": {
+    "body-parser": "^1.15.0",
+    "compression": "^1.6.1",
+    "cookie-parser": "^1.4.1",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "jade": "^1.11.0",
     "jshint": "^2.9.1",
+    "mongoose": "^4.4.8",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.0",
+    "path": "^0.12.7",
+    "serve-favicon": "^2.3.0",
     "socket.io": "^1.4.5"
   }
 }
